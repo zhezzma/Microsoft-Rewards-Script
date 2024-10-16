@@ -24,23 +24,23 @@ jobs:
           node-version: '20.x'
 
       - name: Install dependencies
-        run: npm install
+        run: |
+          npm install
+          npx playwright install chrome
 
       - name: Create accounts.json
-        run: echo "$ACCOUNTS_JSON" > src/accounts.json
-
-      - name: Update version.json
         run: |
-          echo "{\"lastUpdated\": \"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"}" > .github/version.json
+          echo "$ACCOUNTS_JSON" > src/accounts.json
+          npm run build
 
       - name: Login to website
         run: |
           set -e
-          npm run build
           xvfb-run --server-args="-screen 0 1280x1024x24" npm run start
 
       - name: Commit and push changes
         run: |
+          echo "{\"lastUpdated\": \"$(date -u +'%Y-%m-%dT%H:%M:%SZ')\"}" > .github/version.json
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add .github/version.json
