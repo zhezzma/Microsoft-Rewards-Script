@@ -175,7 +175,7 @@ export class MicrosoftRewardsBot {
 
         // Complete punch cards
         if (this.config.workers.doPunchCards) {
-            await this.workers.doPunchCard(workerPage, data)
+            //await this.workers.doPunchCard(workerPage, data)
         }
 
         // Do desktop searches
