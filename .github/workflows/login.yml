@@ -37,7 +37,7 @@ jobs:
       - name: Login to website
         run: |
           set -e
-          timeout -k 10s 5m xvfb-run --server-args="-screen 0 1280x1024x24" npm run start  
+          timeout -k 10s 15m xvfb-run --server-args="-screen 0 1280x1024x24" npm run start  
           
       - name: Commit and push changes
         run: |
