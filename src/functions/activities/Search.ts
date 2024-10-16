@@ -236,6 +236,7 @@ export class Search extends Workers {
 
             } catch (error) {
                 this.bot.log('SEARCH-GOOGLE-TRENDS', 'An error occurred:' + error, 'error')
+                break;
             }
         }
 

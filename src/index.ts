@@ -165,22 +165,44 @@ export class MicrosoftRewardsBot {
 
         // Complete daily set
         if (this.config.workers.doDailySet) {
-            await this.workers.doDailySet(workerPage, data)
+            try {
+                await this.workers.doDailySet(workerPage, data)
+            }
+            catch {
+                log('MAIN', 'Failed to complete daily set');
+            }
         }
 
         // Complete more promotions
         if (this.config.workers.doMorePromotions) {
-            await this.workers.doMorePromotions(workerPage, data)
+            try {
+                await this.workers.doMorePromotions(workerPage, data)
+            }
+            catch {
+                log('MAIN', 'Failed to complete more promotions');
+            }
+
         }
 
         // Complete punch cards
         if (this.config.workers.doPunchCards) {
-            //await this.workers.doPunchCard(workerPage, data)
+            try {
+                await this.workers.doPunchCard(workerPage, data)
+            }
+            catch {
+                log('MAIN', 'Failed to complete punch cards');
+            }
+
         }
 
         // Do desktop searches
         if (this.config.workers.doDesktopSearch) {
-            await this.activities.doSearch(workerPage, data)
+            try {
+                await this.activities.doSearch(workerPage, data)
+            }
+            catch {
+                log('MAIN', 'Failed to complete desktop searches');
+            }
         }
 
         // Save cookies

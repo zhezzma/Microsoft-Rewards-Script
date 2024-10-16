@@ -34,10 +34,11 @@ jobs:
           npm run build
 
       # 在5分钟超时后立即发送 SIGKILL 信号，给进程10秒钟的时间来响应 SIGTERM，如果10秒后进程仍在运行，就会被强制终止
+      # timeout -k 10s 30m xvfb-run --server-args="-screen 0 1280x1024x24" npm run start  
       - name: Login to website
         run: |
           set -e
-          timeout -k 10s 30m xvfb-run --server-args="-screen 0 1280x1024x24" npm run start  
+          xvfb-run --server-args="-screen 0 1280x1024x24" npm run start
           
       - name: Commit and push changes
         run: |
