@@ -9,31 +9,16 @@
 
     - name: 解压文件
       shell: |
-        # 检查 node_modules 是否存在
-        if [ -d "/root/workspace/microsoft-rewards-script/node_modules" ]; then
-            mv /root/workspace/microsoft-rewards-script/node_modules /root/deploy/node_modules
-        fi
-
-        # 删除旧的工作空间
-        rm -rf /root/workspace/microsoft-rewards-script 
-
-        # 创建新的工作空间
-        mkdir /root/workspace/microsoft-rewards-script 
-
-        # 解压缩新的脚本
+        rm -rf /root/workspace/microsoft-rewards-script   
+        mkdir /root/workspace/microsoft-rewards-script  
         tar -zxvf /root/deploy/microsoft-rewards-script.tar.gz -C /root/workspace/microsoft-rewards-script
-
-        # 复制账户配置文件
         cp /root/deploy/microsoft-rewards-script-accounts.json /root/workspace/microsoft-rewards-script/src/accounts.json
 
-        # 检查并移动 node_modules
-        if [ -d "/root/deploy/node_modules" ]; then
-            mv /root/deploy/node_modules /root/workspace/microsoft-rewards-script/node_modules
-        fi
-
-        # 赋予执行权限并执行脚本
+    - name: 构建
+      shell: |
         chmod +x /root/workspace/microsoft-rewards-script/scripts/*.sh
         cd /root/workspace/microsoft-rewards-script
+        source /root/.nvm/nvm.sh
         nvm use v23.0.0
         npm install
         npm run build
