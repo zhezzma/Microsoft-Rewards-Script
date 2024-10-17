@@ -12,4 +12,4 @@
         rm -rf /root/workspace/microsoft-rewards-script &&
         mkdir /root/workspace/microsoft-rewards-script &&
         tar -zxvf /root/deploy/microsoft-rewards-script.tar.gz -C /root/workspace/microsoft-rewards-script
-        cp /root/deploy/microsoft-rewards-script-accounts.json /root/workspace/microsoft-rewards-script/accounts.json
+        cp /root/deploy/microsoft-rewards-script-accounts.json /root/workspace/microsoft-rewards-script/src/accounts.json
