@@ -5,7 +5,9 @@ main:
       imports: https://godgodgame.coding.net/p/tools/d/oci-private-key/git/tree/master/envs.yml
       stages:
         - name: 构建并打包
-          script: tar -zcvf release.tar.gz --exclude=.git . #`-C .dist/` 指明 tar 在压缩前先进入 `dist` 目录。`.` 表示当前目录
+          script: | 
+            mkdir archive
+            tar --exclude='./archive' --exclude='.git' -zcvf archive/release.tar.gz .
         - name: ansible发布
           image: plugins/ansible
           settings:

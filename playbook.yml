@@ -4,7 +4,7 @@
   tasks:
     - name: 复制到远程服务器
       copy:
-        src: release.tar.gz
+        src: archive/release.tar.gz
         dest: /root/deploy/microsoft-rewards-script.tar.gz
 
     - name: 解压文件
