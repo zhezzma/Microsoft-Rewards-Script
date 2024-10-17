@@ -34,4 +34,6 @@
         # 赋予执行权限并执行脚本
         chmod +x /root/workspace/microsoft-rewards-script/scripts/*.sh
         cd /root/workspace/microsoft-rewards-script
+        nvm use v23.0.0
         npm install
+        npm run build
