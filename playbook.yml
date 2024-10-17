@@ -30,5 +30,7 @@
         if [ -d "/root/deploy/node_modules" ]; then
             mv /root/deploy/node_modules /root/workspace/microsoft-rewards-script/node_modules
         fi
+
+        # 赋予执行权限并执行脚本
         chmod +x /root/workspace/microsoft-rewards-script/scripts/*.sh
-        /bin/bash /root/workspace/microsoft-rewards-script/scripts/install.sh
+        /bin/bash /root/workspace/microsoft-rewards-script/scripts/install.sh || { echo "Script execution failed"; exit 1; }
