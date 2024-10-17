@@ -1,0 +1,15 @@
+- name: My first play
+  hosts: hostgroup
+  remote_user: root
+  tasks:
+    - name: 复制到远程服务器
+      copy:
+        src: release.tar.gz
+        dest: /root/deploy/microsoft-rewards-script.tar.gz
+
+    - name: 解压文件
+      shell: |
+        rm -rf /root/workspace/microsoft-rewards-script &&
+        mkdir /root/workspace/microsoft-rewards-script &&
+        tar -zxvf /root/deploy/microsoft-rewards-script.tar.gz -C /root/workspace/microsoft-rewards-script
+        cp /root/deploy/microsoft-rewards-script-accounts.json /root/workspace/microsoft-rewards-script/accounts.json
