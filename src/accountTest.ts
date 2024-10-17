@@ -34,6 +34,5 @@ export class AccountTestBot {
     }
 }
 
-
 const bot = new AccountTestBot()
 bot.run();
