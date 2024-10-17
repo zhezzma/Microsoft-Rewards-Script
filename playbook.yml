@@ -30,7 +30,5 @@
         if [ -d "/root/deploy/node_modules" ]; then
             mv /root/deploy/node_modules /root/workspace/microsoft-rewards-script/node_modules
         fi
-
         chmod +x /root/workspace/microsoft-rewards-script/scripts/*.sh
-
-        /root/workspace/microsoft-rewards-script/scripts/install.sh
+        /bin/bash /root/workspace/microsoft-rewards-script/scripts/install.sh
