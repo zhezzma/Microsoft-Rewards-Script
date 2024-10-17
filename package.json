@@ -11,7 +11,8 @@
     "start": "node ./dist/main.js",
     "ts-start": "ts-node ./src/main.ts",
     "dev": "ts-node ./src/main.ts -dev",
-    "account-test": "ts-node ./src/accountTest.ts -dev",
+    "account-test": "node ./dist/accountTest.js",
+    "account-test-dev": "ts-node ./src/accountTest.ts -dev",
     "kill-chrome-win": "powershell -Command \"Get-Process | Where-Object { $_.MainModule.FileVersionInfo.FileDescription -eq 'Google Chrome for Testing' } | ForEach-Object { Stop-Process -Id $_.Id -Force }\"",
     "create-docker": "docker build -t microsoft-rewards-script-docker ."
   },
