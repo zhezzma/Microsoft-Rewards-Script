@@ -13,7 +13,9 @@
         mkdir /root/workspace/microsoft-rewards-script  
         tar -zxvf /root/deploy/microsoft-rewards-script.tar.gz -C /root/workspace/microsoft-rewards-script
         cp /root/deploy/microsoft-rewards-script-accounts.json /root/workspace/microsoft-rewards-script/src/accounts.json
-
+      args:
+        executable: /bin/bash
+        
     - name: 构建
       shell: |
         chmod +x /root/workspace/microsoft-rewards-script/scripts/*.sh
@@ -22,3 +24,5 @@
         nvm use v23.0.0
         npm install
         npm run build
+      args:
+        executable: /bin/bash
