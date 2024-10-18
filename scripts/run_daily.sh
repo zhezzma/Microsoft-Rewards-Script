@@ -6,6 +6,8 @@ export PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin
 # Ensure TZ is set
 export TZ=${TZ}
 
+source /root/.nvm/nvm.sh
+
 # Change directory to the application directory
 cd /root/workspace/microsoft-rewards-script
 
