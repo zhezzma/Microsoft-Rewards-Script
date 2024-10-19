@@ -1,1 +1,1 @@
-0 1,10,20 * * * GLOBAL_TIMEOUT=600000 HEADLESS=true TZ=Asia/Shanghai /bin/bash /root/workspace/microsoft-rewards-script/scripts/run_daily.sh >> /var/log/cron.log 2>&1
+0 1,10,20 * * * CLUSTERS=2 GLOBAL_TIMEOUT=600000 HEADLESS=true TZ=Asia/Shanghai /bin/bash /root/workspace/microsoft-rewards-script/scripts/run_daily.sh >> /var/log/cron.log 2>&1
