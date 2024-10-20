@@ -38,5 +38,6 @@ echo "Starting script..."
 # Update config with environment variables before running the script
 node src/updateConfig.js
 
+killall  Xvfb
 # Execute the Node.js script directly
 xvfb-run --server-args="-screen 0 1280x1024x24" npm run start
