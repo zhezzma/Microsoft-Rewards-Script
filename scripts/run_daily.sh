@@ -40,3 +40,6 @@ node src/updateConfig.js
 
 # Execute the Node.js script directly
 npm run start
+
+
+
