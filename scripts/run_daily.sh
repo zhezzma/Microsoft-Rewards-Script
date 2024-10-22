@@ -38,6 +38,8 @@ echo "Starting script..."
 # Update config with environment variables before running the script
 node src/updateConfig.js
 
+killall chrome
+
 # Execute the Node.js script directly
 npm run start
 
