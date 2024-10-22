@@ -43,5 +43,5 @@ killall chrome
 # Execute the Node.js script directly
 npm run start
 
-
+killall chrome
 
