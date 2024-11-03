@@ -28,3 +28,12 @@
 ```
 
 2. 注意需要推送..所以要开启写入权限 Settings -> Actions -> General -> Workflow permissions:Read and write permissions
+
+
+## 修改的地方
+
+1. index.Desktop和index.Mobile中添加了错误的捕捉
+
+2. 添加了main.ts,分离了MicrosoftRewardsBot和运行逻辑
+
+3. 添加了accountTest.ts文件,用于测试

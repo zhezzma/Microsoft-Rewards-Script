@@ -133,80 +133,65 @@ export class MicrosoftRewardsBot {
 
         log('MAIN', 'Starting DESKTOP browser')
 
-        // Login into MS Rewards, then go to rewards homepage
-        await this.login.login(this.homePage, account.email, account.password)
-        this.accessToken = await this.login.getMobileAccessToken(this.homePage, account.email)
 
-        await this.browser.func.goHome(this.homePage)
+        try {
+            // Login into MS Rewards, then go to rewards homepage
+            await this.login.login(this.homePage, account.email, account.password)
+            this.accessToken = await this.login.getMobileAccessToken(this.homePage, account.email)
 
-        const data = await this.browser.func.getDashboardData()
-        log('MAIN-POINTS', `Current point count: ${data.userStatus.availablePoints}`)
+            await this.browser.func.goHome(this.homePage)
 
-        const browserEnarablePoints = await this.browser.func.getBrowserEarnablePoints()
-        const appEarnablePoints = await this.browser.func.getAppEarnablePoints(this.accessToken)
+            const data = await this.browser.func.getDashboardData()
+            log('MAIN-POINTS', `Current point count: ${data.userStatus.availablePoints}`)
 
-        const earnablePoints = browserEnarablePoints + appEarnablePoints
-        this.collectedPoints = earnablePoints
-        log('MAIN-POINTS', `You can earn ${earnablePoints} points today (Browser: ${browserEnarablePoints} points, App: ${appEarnablePoints} points)`)
+            const browserEnarablePoints = await this.browser.func.getBrowserEarnablePoints()
+            const appEarnablePoints = await this.browser.func.getAppEarnablePoints(this.accessToken)
 
-        // If runOnZeroPoints is false and 0 points to earn, don't continue
-        if (!this.config.runOnZeroPoints && this.collectedPoints === 0) {
-            log('MAIN', 'No points to earn and "runOnZeroPoints" is set to "false", stopping!')
+            const earnablePoints = browserEnarablePoints + appEarnablePoints
+            this.collectedPoints = earnablePoints
+            log('MAIN-POINTS', `You can earn ${earnablePoints} points today (Browser: ${browserEnarablePoints} points, App: ${appEarnablePoints} points)`)
 
-            // Close desktop browser
-            return await this.closeBrowser(browser, account.email)
-        }
+            // If runOnZeroPoints is false and 0 points to earn, don't continue
+            if (!this.config.runOnZeroPoints && this.collectedPoints === 0) {
+                log('MAIN', 'No points to earn and "runOnZeroPoints" is set to "false", stopping!')
 
-        // Open a new tab to where the tasks are going to be completed
-        const workerPage = await browser.newPage()
+                // Close desktop browser
+                return await this.closeBrowser(browser, account.email)
+            }
 
-        // Go to homepage on worker page
-        await this.browser.func.goHome(workerPage)
+            // Open a new tab to where the tasks are going to be completed
+            const workerPage = await browser.newPage()
 
-        // Complete daily set
-        if (this.config.workers.doDailySet) {
-            try {
+            // Go to homepage on worker page
+            await this.browser.func.goHome(workerPage)
+
+            // Complete daily set
+            if (this.config.workers.doDailySet) {
                 await this.workers.doDailySet(workerPage, data)
             }
-            catch {
-                log('MAIN', 'Failed to complete daily set');
-            }
-        }
 
-        // Complete more promotions
-        if (this.config.workers.doMorePromotions) {
-            try {
+            // Complete more promotions
+            if (this.config.workers.doMorePromotions) {
                 await this.workers.doMorePromotions(workerPage, data)
             }
-            catch {
-                log('MAIN', 'Failed to complete more promotions');
-            }
 
-        }
-
-        // Complete punch cards
-        if (this.config.workers.doPunchCards) {
-            try {
+            // Complete punch cards
+            if (this.config.workers.doPunchCards) {
                 await this.workers.doPunchCard(workerPage, data)
             }
-            catch {
-                log('MAIN', 'Failed to complete punch cards');
-            }
 
-        }
-
-        // Do desktop searches
-        if (this.config.workers.doDesktopSearch) {
-            try {
+            // Do desktop searches
+            if (this.config.workers.doDesktopSearch) {
                 await this.activities.doSearch(workerPage, data)
             }
-            catch {
-                log('MAIN', 'Failed to complete desktop searches');
-            }
-        }
 
-        // Save cookies
-        await saveSessionData(this.config.sessionPath, browser, account.email, this.isMobile)
+            // Save cookies
+            await saveSessionData(this.config.sessionPath, browser, account.email, this.isMobile)
+
+        }
+        catch {
+            log('MAIN', 'Error in Desktop, stopping!')
+        }
 
         // Close desktop browser
         await this.closeBrowser(browser, account.email)
@@ -222,59 +207,65 @@ export class MicrosoftRewardsBot {
 
         log('MAIN', 'Starting MOBILE browser')
 
-        // Login into MS Rewards, then go to rewards homepage
-        await this.login.login(this.homePage, account.email, account.password)
-        await this.browser.func.goHome(this.homePage)
+        try {
+            // Login into MS Rewards, then go to rewards homepage
+            await this.login.login(this.homePage, account.email, account.password)
+            await this.browser.func.goHome(this.homePage)
 
-        const data = await this.browser.func.getDashboardData()
+            const data = await this.browser.func.getDashboardData()
 
-        // Do daily check in
-        if (this.config.workers.doDailyCheckIn) {
-            await this.activities.doDailyCheckIn(this.accessToken, data)
-        }
-
-        // Do read to earn
-        if (this.config.workers.doReadToEarn) {
-            await this.activities.doReadToEarn(this.accessToken, data)
-        }
-
-        // If no mobile searches data found, stop (Does not exist on new accounts)
-        if (data.userStatus.counters.mobileSearch) {
-            // Open a new tab to where the tasks are going to be completed
-            const workerPage = await browser.newPage()
-
-            // Go to homepage on worker page
-            await this.browser.func.goHome(workerPage)
-
-            // Do mobile searches
-            if (this.config.workers.doMobileSearch) {
-                await this.activities.doSearch(workerPage, data)
-
-                // Fetch current search points
-                const mobileSearchPoints = (await this.browser.func.getSearchPoints()).mobileSearch?.[0]
-
-                // If the remaining mobile points does not equal 0, restart and assume the generated UA is invalid
-                // Retry until all points are gathered when (retryMobileSearch is enabled)
-                if (this.config.searchSettings.retryMobileSearch && mobileSearchPoints && ((mobileSearchPoints.pointProgressMax - mobileSearchPoints.pointProgress) > 0)) {
-                    log('MAIN', 'Unable to complete mobile searches, bad User-Agent? Retrying...')
-
-                    // Close mobile browser
-                    await this.closeBrowser(browser, account.email)
-
-                    // Retry
-                    await this.Mobile(account)
-                }
+            // Do daily check in
+            if (this.config.workers.doDailyCheckIn) {
+                await this.activities.doDailyCheckIn(this.accessToken, data)
             }
-        } else {
-            log('MAIN', 'No mobile searches found!')
+
+            // Do read to earn
+            if (this.config.workers.doReadToEarn) {
+                await this.activities.doReadToEarn(this.accessToken, data)
+            }
+
+            // If no mobile searches data found, stop (Does not exist on new accounts)
+            if (data.userStatus.counters.mobileSearch) {
+                // Open a new tab to where the tasks are going to be completed
+                const workerPage = await browser.newPage()
+
+                // Go to homepage on worker page
+                await this.browser.func.goHome(workerPage)
+
+                // Do mobile searches
+                if (this.config.workers.doMobileSearch) {
+                    await this.activities.doSearch(workerPage, data)
+
+                    // Fetch current search points
+                    const mobileSearchPoints = (await this.browser.func.getSearchPoints()).mobileSearch?.[0]
+
+                    // If the remaining mobile points does not equal 0, restart and assume the generated UA is invalid
+                    // Retry until all points are gathered when (retryMobileSearch is enabled)
+                    if (this.config.searchSettings.retryMobileSearch && mobileSearchPoints && ((mobileSearchPoints.pointProgressMax - mobileSearchPoints.pointProgress) > 0)) {
+                        log('MAIN', 'Unable to complete mobile searches, bad User-Agent? Retrying...')
+
+                        // Close mobile browser
+                        await this.closeBrowser(browser, account.email)
+
+                        // Retry
+                        await this.Mobile(account)
+                    }
+                }
+            } else {
+                log('MAIN', 'No mobile searches found!')
+            }
+
+            // Fetch new points
+            const earnablePoints = await this.browser.func.getBrowserEarnablePoints() + await this.browser.func.getAppEarnablePoints(this.accessToken)
+
+            // If the new earnable is 0, means we got all the points, else retract
+            this.collectedPoints = earnablePoints === 0 ? this.collectedPoints : (this.collectedPoints - earnablePoints)
+            log('MAIN-POINTS', `The script collected ${this.collectedPoints} points today`)
+
         }
-
-        // Fetch new points
-        const earnablePoints = await this.browser.func.getBrowserEarnablePoints() + await this.browser.func.getAppEarnablePoints(this.accessToken)
-
-        // If the new earnable is 0, means we got all the points, else retract
-        this.collectedPoints = earnablePoints === 0 ? this.collectedPoints : (this.collectedPoints - earnablePoints)
-        log('MAIN-POINTS', `The script collected ${this.collectedPoints} points today`)
+        catch {
+            log('MAIN', 'Error in Mobile, stopping!')
+        }
 
         // Close mobile browser
         await this.closeBrowser(browser, account.email)
@@ -290,5 +281,3 @@ export class MicrosoftRewardsBot {
     }
 
 }
-
-
