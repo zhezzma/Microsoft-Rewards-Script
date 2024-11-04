@@ -21,4 +21,5 @@
 # For more information see the manual pages of crontab(5) and cron(8)
 # 
 # m h  dom mon dow   command
-0 0,12 * * * HEADLESS=true RETRY_MOBILE_SEARCH=false GLOBAL_TIMEOUT=600000 TZ=Asia/Shanghai USE_GEO_LOCALE_QUERIES=false /bin/bash /root/workspace/microsoft-rewards-script/scripts/run_daily.sh >> /var/log/cron.log 2>&1
+
+0 0,13 * * * HEADLESS=true RETRY_MOBILE_SEARCH=false GLOBAL_TIMEOUT=600000 TZ=Asia/Shanghai USE_GEO_LOCALE_QUERIES=false /bin/bash /root/workspace/microsoft-rewards-script/scripts/run_daily.sh >> /var/log/cron.log 2>&1
