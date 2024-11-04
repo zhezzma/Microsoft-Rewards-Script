@@ -18,7 +18,6 @@
         
     - name: 构建
       shell: |
-        chmod +x /root/workspace/microsoft-rewards-script/scripts/*.sh
         cd /root/workspace/microsoft-rewards-script
         source /root/.nvm/nvm.sh
         nvm use v23.0.0
@@ -26,3 +25,13 @@
         npm run build
       args:
         executable: /bin/bash
+
+    - name: 运行脚本
+      shell: |
+        sudo chmod +x /root/workspace/microsoft-rewards-script/scripts/*.sh
+        sudo cp -f /root/workspace/microsoft-rewards-script/scripts/crontab.template /etc/cron.d/microsoft-rewards-cron
+        sudo chmod 644 /etc/cron.d/microsoft-rewards-cron
+        sudo chown root:root /etc/cron.d/microsoft-rewards-cron
+      args:
+        executable: /bin/bash
+
