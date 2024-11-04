@@ -216,7 +216,7 @@ export class Search extends Workers {
 
             try {
                 const request = {
-                    url: `https://trends-google.zhepama.workers.dev?geo=${geoLocale}&hl=en&ed=${formattedDate}&ns=15`,
+                    url: `https://trends-google.igiven.com?geo=${geoLocale}&hl=en&ed=${formattedDate}&ns=15`,
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json'
