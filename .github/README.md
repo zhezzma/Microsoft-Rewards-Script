@@ -37,3 +37,5 @@
 2. 添加了main.ts,分离了MicrosoftRewardsBot和运行逻辑
 
 3. 添加了accountTest.ts文件,用于测试
+
+4. 修改了Search.getGoogleTrends中的url地址
