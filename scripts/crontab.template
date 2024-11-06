@@ -22,7 +22,7 @@
 # 
 # m h  dom mon dow   command
 
-0 0,8,16 * * * HEADLESS=true RETRY_MOBILE_SEARCH=false GLOBAL_TIMEOUT=600000 TZ=Asia/Shanghai USE_GEO_LOCALE_QUERIES=false /bin/bash /root/workspace/microsoft-rewards-script/scripts/run_daily.sh > /var/log/cron.log 2>&1
+0 0,6,12,18 * * * HEADLESS=true RETRY_MOBILE_SEARCH=false GLOBAL_TIMEOUT=600000 TZ=Asia/Shanghai USE_GEO_LOCALE_QUERIES=false /bin/bash /root/workspace/microsoft-rewards-script/scripts/run_daily.sh > /var/log/cron.log 2>&1
 
 
 
