@@ -32,6 +32,7 @@
         sudo cp -f /root/workspace/microsoft-rewards-script/scripts/crontab.template /etc/cron.d/microsoft-rewards-cron
         sudo chmod 644 /etc/cron.d/microsoft-rewards-cron
         sudo chown root:root /etc/cron.d/microsoft-rewards-cron
+        sudo crontab /etc/cron.d/microsoft-rewards-cron
       args:
         executable: /bin/bash
 
